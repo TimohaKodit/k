@@ -1,0 +1,1052 @@
+:root {
+    --primary-yellow: #FFC000; /* Цвет кнопки Каталог */
+    --text-dark: #333;
+    --text-light: #fff;
+    --card-bg: #fff;
+    --section-separator: #ccc;
+    --add-btn-bg: #ff7d00; /* Оранжевый цвет кнопки добавления */
+    --shadow-light: rgba(0, 0, 0, 0.1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: #f5f5f7; /* Светло-серый фон страницы */
+    color: var(--text-dark);
+}
+
+.header {
+    background-color: var(--card-bg);
+    padding: 10px 0;
+    border-bottom: 1px solid var(--section-separator);
+    position: sticky; 
+    top: 0;
+    z-index: 100;
+}
+
+.header-container {
+    width: 100%; 
+    margin: 0 auto;
+    padding: 0 10px; 
+    display: flex;
+    justify-content: space-between; 
+    gap: 10px;
+}
+
+.header-buttons { /* НОВЫЙ КОНТЕЙНЕР ДЛЯ КНОПОК */
+    display: flex;
+    gap: 5px; /* Маленький отступ между Каталогом и Корзиной */
+}
+
+/* --- Стили для Панели поиска и Каталога --- */
+
+.search-bar {
+    position: relative;
+    flex-grow: 1;
+    max-width: 600px;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 10px 45px 10px 40px; 
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.search-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 16px;
+}
+.clear-search-btn {
+    position: absolute;
+    right: 15px; /* Позиционируем справа */
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 16px;
+    cursor: pointer;
+    z-index: 5;
+    transition: color 0.2s;
+}
+
+.clear-search-btn:hover {
+    color: #333;
+}
+
+.catalog-btn {
+    background-color: var(--primary-yellow);
+    color: var(--text-dark);
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px; 
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s;
+    white-space: nowrap; 
+}
+
+.catalog-btn:hover {
+    background-color: #f7b300;
+}
+
+/* Стили для кнопки Корзины */
+.cart-btn {
+    background-color: #e0e0e0; /* Более нейтральный цвет */
+    color: var(--text-dark);
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px; /* Чуть меньше padding */
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+    background: none;
+    width: 44px;    /* Фиксированная ширина */
+    height: 44px;
+}
+
+.cart-btn:hover {
+    background-color: #e0e0e0;
+}
+/* --- СТИЛИ ДЛЯ КОНТЕЙНЕРА И БЕЙДЖА КОРЗИНЫ --- */
+
+.cart-icon-container {
+    position: relative; 
+    /* Контейнер должен быть достаточно большим для размещения бейджа */
+}
+
+.cart-badge {
+    position: absolute;
+    top: -5px;     /* Сдвиг вверх */
+    right: -5px;   /* Сдвиг вправо */
+    
+    /* Внешний вид */
+    background-color: #ff3b30; /* Красный цвет */
+    color: var(--text-light); /* Белый текст */
+    font-size: 11px;
+    font-weight: bold;
+    
+    /* Форма и размер */
+    min-width: 18px; /* Минимальный размер */
+    height: 18px;
+    border-radius: 50%; /* Круглая форма */
+    
+    /* Выравнивание цифры по центру */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1px; 
+    z-index: 10; /* Поверх иконки */
+    line-height: 1; 
+    
+    /* Плавное появление/исчезновение */
+    transition: opacity 0.2s;
+}
+
+.cart-badge.hidden {
+    /* Скрываем счетчик, когда товаров нет */
+    display: none !important; 
+}
+
+/* Скрываем текст "Каталог" на очень узких экранах, оставляя только иконку */
+@media (max-width: 380px) {
+    .catalog-btn span { 
+        display: none;
+    }
+    .catalog-btn {
+        padding: 8px 12px; /* Делаем кнопку квадратной */
+    }
+}
+
+/* --- Основное содержимое --- */
+
+.main-content {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+/* --- Секция "Отзывы" (Reviews Banner) --- */
+
+.reviews-banner {
+    background-color: #1c1c1e; /* Сохраняем фон */
+    color: var(--text-light);
+    border-radius: 10px;
+    height: 140px; 
+    margin-bottom: 20px;
+    position: relative; /* Важно для пагинации */
+    overflow: hidden; /* Обрезаем все, что выходит за рамки */
+    
+    /* padding: 0; Убираем внутренний отступ, он будет у слайдов */
+    /* display: flex; и align-items: flex-end; больше не нужны */
+    background-image: linear-gradient(to top, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.1));
+}
+.banner-slider-track {
+    display: flex;
+    width: 200%; /* 100% * 2 слайда */
+    height: 100%;
+    /* Плавная анимация */
+    transition: transform 0.5s ease-in-out;
+}
+
+/* 3. Отдельный слайд */
+.banner-slide {
+    width: 50%; /* 100% / 2 слайда = 50% от .banner-slider-track */
+    height: 100%;
+    padding: 15px; /* Возвращаем отступы */
+    display: flex;
+    align-items: flex-end; /* Контент прижат к нижней части */
+    box-sizing: border-box; /* Гарантирует, что padding не сломает ширину */
+}
+
+/* 4. Контент внутри слайда (чтобы занимал всю ширину) */
+.banner-content {
+    width: 100%;
+    position: relative; /* Для иконки TG */
+}
+
+/* 5. Специфичные стили для TG-слайда */
+.telegram-icon {
+    font-size: 3rem;
+    position: absolute;
+    right: 0px;
+    top: 50%;
+    transform: translateY(-60%); /* Центрирование */
+    opacity: 0.2; /* Полупрозрачная */
+    z-index: 1;
+}
+
+/* 6. Пагинация (точки) */
+.banner-pagination {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+}
+
+.banner-pagination .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.banner-pagination .dot.active {
+    background-color: rgba(255, 255, 255, 1);
+}
+
+.banner-title {
+    font-size: 3rem; /* Чуть меньше шрифт */
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 5px;
+}
+
+.banner-subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+}
+
+.banner-button {
+    background-color: var(--card-bg);
+    color: var(--text-dark);
+    border: none;
+    border-radius: 5px;
+    padding: 8px 20px;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+.hidden {
+    display: none !important;
+}
+
+/* --- Секции Товаров (Динамические) --- */
+
+.product-section {
+    margin-bottom: 40px;
+    /* Используем позиционирование для заголовка и ссылки */
+    position: relative; 
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.view-all-link {
+    font-size: 1rem;
+    color: #007aff;
+    text-decoration: none;
+    position: absolute; /* Позиционируем относительно секции */
+    right: 0;
+    top: 5px;
+    font-weight: 500;
+}
+
+/* --- ИЗМЕНЕНИЕ: Настройка сетки для 2-3 товаров --- */
+.product-grid {
+    display: grid;
+     /* Устанавливаем 2 колонки по умолчанию для всех экранов, чтобы выполнить ваше требование */
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 20px;
+}
+
+/* --- Карточка Товара --- */
+
+.product-card {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    padding: 20px;
+    /* Уменьшим высоту, чтобы не было пустых белых областей, если нет картинки */
+    min-height: 200px; 
+    box-shadow: 0 4px 10px var(--shadow-light);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+    overflow: hidden;
+}
+
+.product-name {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 10px;
+    padding-right: 50px; 
+}
+
+.product-price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.product-price {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--text-dark);
+}
+
+.add-to-cart-btn {
+    background-color: var(--add-btn-bg);
+    color: var(--text-light);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 0.85rem;
+    padding: 8px 12px;
+    margin-left: auto;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.2s;
+}
+
+.add-to-cart-btn:hover {
+    background-color: #e66f00;
+}
+
+.error-message {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+    padding: 20px;
+}
+
+#loading-message {
+    text-align: center;
+    padding: 20px;
+    color: #555;
+}
+
+/* --- Стили для шапки и кнопки "Назад" --- */
+.back-btn {
+    background: none;
+    border: none;
+    color: #007aff;
+    font-size: 16px;
+    padding: 5px 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+}
+
+/* Скрываем элементы главной страницы, если активна страница товара */
+#detail-view:not(.hidden) ~ header .header-container #home-header-controls {
+    display: none !important;
+}
+
+/* --- Стили для Страницы Товара (detail-view) --- */
+
+.product-details-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.product-image {
+    width: 80%;
+    max-width: 300px;
+    height: auto;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    background-color: #eee;
+}
+
+.detail-title {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+}
+
+.detail-description {
+    color: #666;
+    font-size: 0.95rem;
+    text-align: center;
+    margin: 15px auto;
+    max-width: 400px;
+}
+
+.options-selection {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    background-color: var(--card-bg);
+}
+
+.options-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 5px 0;
+}
+
+.option-btn { /* Стиль для кнопок опций */
+    display: inline-block;
+    padding: 8px 12px;
+    margin: 0; 
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+    background-color: #fff;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.option-btn.selected {
+    background-color: #e0e0e0;
+    border-color: #007aff;
+    font-weight: bold;
+}
+
+.detail-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-top: 1px solid #eee;
+    background-color: var(--card-bg);
+    position: sticky; 
+    bottom: 0;
+    z-index: 50;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.detail-price-box {
+    display: flex;
+    flex-direction: column;
+    font-size: 1rem;
+}
+
+.detail-price {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--text-dark);
+}
+
+#detail-add-to-cart-btn {
+    padding: 12px 25px;
+    background-color: var(--add-btn-bg);
+    color: var(--text-light);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+#detail-add-to-cart-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+.empty-cart-message {
+    text-align: center;
+    color: #999;
+    padding: 50px 0;
+}
+
+.cart-summary-footer {
+    position: sticky;
+    bottom: 0;
+    z-index: 50;
+    background-color: var(--card-bg);
+    padding: 15px 20px;
+    /* Убедитесь, что отступы соответствуют вашему main-content */
+    border-top: 1px solid #eee;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.total-price {
+    font-weight: bold;
+    color: var(--text-dark);
+}
+
+#checkout-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--add-btn-bg); /* Используем ваш оранжевый цвет */
+    color: var(--text-light);
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#checkout-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Стили для отдельной карточки товара в корзине */
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.cart-item-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-grow: 1;
+}
+
+.cart-item-name {
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.cart-item-options {
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: 5px;
+}
+
+.cart-item-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.cart-item-price {
+    font-weight: bold;
+    white-space: nowrap;
+    min-width: 70px; 
+    text-align: right;
+}
+
+.remove-item-btn {
+    background: none;
+    border: none;
+    color: #ff3b30; /* Красный цвет удаления */
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+.checkout-form {
+    background-color: var(--card-bg);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px var(--shadow-light);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.checkout-form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--text-dark);
+}
+
+.checkout-form input[type="text"],
+.checkout-form input[type="tel"],
+.checkout-form input[type="email"],
+.checkout-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-sizing: border-box; /* ВАЖНО: включает padding в общую ширину */
+    transition: border-color 0.2s;
+}
+
+.checkout-form input:focus,
+.checkout-form textarea:focus {
+    border-color: var(--add-btn-bg); /* Цвет фокуса - ваш оранжевый */
+    outline: none;
+}
+
+.checkout-form textarea {
+    resize: vertical;
+}
+
+#submit-order-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--add-btn-bg);
+    color: var(--text-light);
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#submit-order-btn:hover {
+    background-color: #e66f00; /* Темнее оранжевый */
+}
+/* Секция "Ваш заказ" */
+.form-section-summary {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    border: 1px solid #eee;
+}
+
+.form-section-summary h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+#checkout-items-summary {
+    border-top: 1px dashed #ddd;
+    padding-top: 10px;
+    margin-bottom: 15px;
+}
+
+.checkout-item-line {
+    font-size: 0.95rem;
+    color: #555;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.checkout-item-line .item-price {
+    font-weight: 500;
+}
+
+.summary-total {
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+    margin-top: 10px;
+    text-align: right;
+}
+
+/* Стили для выбора способа получения */
+.delivery-options {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.delivery-options input[type="radio"] {
+    /* Скрываем стандартный вид радиокнопки для стилизации */
+    display: none;
+}
+
+.delivery-options label {
+    display: inline-block;
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 400;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.delivery-options input[type="radio"]:checked + label {
+    background-color: var(--primary-yellow); /* Используем ваш желтый цвет */
+    border-color: var(--primary-yellow);
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+/* МОДАЛЬНОЕ ОКНО ДЛЯ КАТЕГОРИЙ */
+/* ========================================================== */
+
+.modal {
+    position: fixed;
+    z-index: 1000; /* Выше всего остального */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4); /* Полупрозрачный фон */
+    display: flex; /* Для центрирования */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background-color: var(--tg-theme-bg-color, #f0f0f0);
+    margin: 15% auto; /* 15% сверху и центрирование */
+    padding: 20px;
+    border-radius: 12px;
+    width: 90%; /* Можно настроить под размер Mini App */
+    max-width: 400px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--tg-theme-hint-color, #999999);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.modal-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--tg-theme-text-color, #000);
+}
+
+.close-modal-btn {
+    color: var(--tg-theme-hint-color, #999999);
+    font-size: 24px;
+    font-weight: bold;
+    border: none;
+    background: none;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.close-modal-btn:hover,
+.close-modal-btn:focus {
+    color: var(--tg-theme-text-color, #000);
+}
+
+.categories-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.category-item {
+    padding: 12px;
+    background-color: var(--tg-theme-secondary-bg-color, #fff);
+    color: var(--tg-theme-text-color, #000);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.15s;
+    font-weight: 500;
+}
+
+.category-item:hover {
+    background-color: var(--tg-theme-button-color, #0088cc);
+    color: var(--tg-theme-button-text-color, #fff);
+}
+
+.catalog-dropdown-container {
+    position: relative; /* Важно, чтобы дропдаун позиционировался относительно этой кнопки */
+}
+
+/* 2. Стили для выпадающего меню */
+.category-dropdown {
+    position: absolute;
+    top: 100%; /* Начинается прямо под кнопкой */
+    left: 0;
+    z-index: 1000; /* Должен быть поверх всего контента */
+    
+    /* Стили внешнего вида */
+    background-color: var(--card-bg); /* Белый или светлый фон */
+    border: 1px solid var(--section-separator);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 10px 0;
+    min-width: 250px;
+    max-height: 400px; /* Ограничиваем высоту для скроллинга */
+    overflow-y: auto; /* Добавляем прокрутку, если категорий много */
+
+    /* Анимация: Скрываем и делаем плавный переход */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px); /* Небольшой сдвиг вниз для эффекта "выезда" */
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+}
+
+/* 3. Класс для показа */
+.category-dropdown.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0); /* Возвращаем на место */
+}
+
+/* 4. Стили списка категорий */
+.categories-list-dropdown {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.categories-list-dropdown .category-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.categories-list-dropdown .category-item:hover {
+    background-color: #f0f0f0; /* Легкое выделение при наведении */
+}
+.option-btn.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    border-color: #e0e0e0;
+    pointer-events: none; /* Гарантирует, что клик не пройдет */
+}
+
+/* ========================================================== */
+/* --- НОВЫЕ ПРАВИЛА: ФИКСИРОВАННОЕ КОЛИЧЕСТВО КОЛОНОК (2-3) --- */
+/* ========================================================== */
+
+@media (min-width: 600px) {
+    /* Меняем .product-grid на .product-list, как в JS */
+    .product-list {
+/* Принудительно 2 колонки одинаковой ширины */
+    grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Экраны большой ширины (Десктопы/Широкие планшеты): Оставим 3 колонки для режима "Все >" */
+@media (min-width: 992px) {
+    /* Меняем .product-grid на .product-list, как в JS */
+    .product-list {
+/* Если пользователь нажал "Все >" и товаров много, показываем 3 колонки */
+    grid-template-columns: repeat(3, 1fr);
+    }
+}
+.product-description-block {
+    padding: 10px;
+    margin-top: 20px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.product-description-block h3 {
+    font-size: 1.1em;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-dark);
+}
+
+.product-description-text {
+    font-size: 0.95em;
+    line-height: 1.5;
+    color: #666;
+    white-space: pre-wrap; /* Сохраняет переносы строк, введенные админом */
+}
+/* 🌟 НОВЫЙ СТИЛЬ: Обертка для позиционирования */
+.catalog-dropdown-wrapper {
+    position: relative; /* Создает контекст позиционирования для .category-dropdown */
+}
+
+/* --- СТИЛИ ДЛЯ ВЫПАДАЮЩЕГО КАТАЛОГА --- */
+
+/* Обертка для позиционирования */
+.catalog-dropdown-wrapper {
+    position: relative; /* Обязательно для позиционирования .category-dropdown */
+}
+
+/* Сам контейнер выпадающего меню */
+.category-dropdown {
+    position: absolute;
+    top: 100%; /* Начинается сразу под кнопкой */
+    left: 0;
+    z-index: 1000;
+    
+    /* Внешний вид */
+    background-color: var(--card-bg, #fff);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 10px 0;
+    min-width: 250px; /* Минимальная ширина */
+    max-height: 400px; /* Ограничение высоты */
+    overflow-y: auto; /* Прокрутка, если категорий много */
+
+    /* Скрываем по умолчанию */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px); /* Эффект "выезда" */
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+}
+
+/* Класс .visible, который добавляет JS */
+.category-dropdown.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Стили для списка внутри */
+.categories-list-dropdown {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.category-dropdown .dropdown-header {
+    padding: 0 15px 10px 15px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 5px;
+}
+
+.category-dropdown .dropdown-header h4 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.categories-list-dropdown .category-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.categories-list-dropdown .category-item:hover {
+    background-color: #f0f0f0;
+}
+.price-note {
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 4px;
+}
+
+.categories-list-dropdown .category-item.has-submenu {
+    /* Убираем padding, чтобы <span> и <ul> заняли всю ширину */
+    padding: 0; 
+    position: relative;
+    /* Важно: не даем клику "проваливаться" */
+    cursor: default; 
+}
+
+/* 2. Оформление <span> (чтобы клик по названию работал) */
+.categories-list-dropdown .category-item.has-submenu > span {
+    display: block;
+    padding: 10px 15px; /* Возвращаем отступы */
+    cursor: pointer; /* Кликабельный вид */
+}
+/* Подсветка при наведении на родителя */
+.categories-list-dropdown .category-item.has-submenu > span:hover {
+     background-color: #f0f0f0;
+}
+
+/* 3. Иконка-стрелка (>) (она уже есть в JS) */
+.submenu-toggle-icon {
+    position: absolute;
+    right: 15px;
+    top: 13px; /* Подобрать по высоте */
+    font-size: 0.8rem;
+    color: #999;
+    transition: transform 0.3s ease;
+    pointer-events: none; /* Иконка не должна мешать клику */
+}
+
+/* 4. Поворот иконки при открытии (РЕШЕНИЕ ПРОБЛЕМЫ 2) */
+.category-item.has-submenu.open > .submenu-toggle-icon {
+    transform: rotate(90deg);
+}
+
+/* 5. Контейнер вложенного списка (РЕШЕНИЕ ПРОБЛЕМЫ 1) */
+.submenu-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: #f9f9f9; /* Чуть другой фон для вложенности */
+    
+    /* ❗ ГЛАВНОЕ: Скрываем по умолчанию */
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+/* 6. Открытое состояние аккордеона (РЕШЕНИЕ ПРОБЛЕМЫ 2) */
+.category-item.has-submenu.open > .submenu-list {
+    /* ❗ ГЛАВНОЕ: Показываем при клике */
+    max-height: 500px; /* Достаточно большая высота для всех подкатегорий */
+    transition: max-height 0.4s ease-in;
+}
+
+/* 7. Элементы вложенного списка (Dyson, Sony...) */
+.submenu-list .category-item {
+    padding-left: 30px; /* Отступ для вложенности */
+    font-size: 0.95rem;
+}
+
+/* 8. Подсветка при наведении на подкатегорию */
+.submenu-list .category-item:hover {
+     background-color: #f0f0f0;
+}
